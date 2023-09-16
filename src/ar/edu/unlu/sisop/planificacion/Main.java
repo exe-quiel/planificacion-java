@@ -1,5 +1,8 @@
 package ar.edu.unlu.sisop.planificacion;
 
+import static ar.edu.unlu.sisop.planificacion.ANSIColors.GREEN;
+import static ar.edu.unlu.sisop.planificacion.ANSIColors.RESET;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,19 +13,11 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    private static final String RESET = "\u001B[0m";
-    private static final String BLACK = "\u001B[30m";
-    private static final String RED = "\u001B[31m";
-    private static final String GREEN = "\u001B[32m";
-    private static final String YELLOW = "\u001B[33m";
-    private static final String BLUE = "\u001B[34m";
-    private static final String PURPLE = "\u001B[35m";
-    private static final String CYAN = "\u001B[36m";
-    private static final String WHITE = "\u001B[37m";
-
     public static void main(String[] args) {
+        final boolean random = false;
+
         //for (int i = 0; i < 10; i++) {
-            List<Proceso> procesos = crearProcesos();
+            List<Proceso> procesos = crearProcesos(random);
             imprimirProcesos(procesos);
             // Necesitamos una copia porque RoundRobin.procesar() modifica el tiempo de servicio de los procesos
             List<Proceso> procesosCopia = procesos.stream().map(Proceso::clonar).collect(Collectors.toList());
@@ -32,11 +27,68 @@ public class Main {
         //}
     }
 
-    private static List<Proceso> crearProcesos() {
+    private static List<Proceso> crearProcesos(boolean random) {
+        /*
+         *  ------PROCESOS------
+| [32mPID[0m:   1 | [32mTS[0m:   5 |
+| [32mPID[0m:   2 | [32mTS[0m:   4 |
+| [32mPID[0m:   3 | [32mTS[0m:   2 |
+| [32mPID[0m:   4 | [32mTS[0m:   8 |
+| [32mPID[0m:   5 | [32mTS[0m:   6 |
+| [32mPID[0m:   6 | [32mTS[0m:   5 |
+| [32mPID[0m:   7 | [32mTS[0m:   3 |
+| [32mPID[0m:   8 | [32mTS[0m:   7 |
+| [32mPID[0m:   9 | [32mTS[0m:   9 |
+| [32mPID[0m:  10 | [32mTS[0m:   6 |
+ --------------------
+         */
         List<Proceso> procesos = new LinkedList<>();
-        for (int pid = 1; pid <= 10; pid++) {
-            int ts = ThreadLocalRandom.current().nextInt(1, 11);
-            procesos.add(new Proceso(pid, ts));
+        if (random) {
+            for (int pid = 1; pid <= 10; pid++) {
+                int ts = ThreadLocalRandom.current().nextInt(1, 11);
+                procesos.add(new Proceso(pid, ts));
+            }
+        } else {
+            for (int pid = 1; pid <= 10; pid++) {
+                int ts;
+                switch (pid) {
+                case 1:
+                    ts = 5;
+                    break;
+                case 2:
+                    ts = 4;
+                    break;
+                case 3:
+                    ts = 2;
+                    break;
+                case 4:
+                    ts = 8;
+                    break;
+                case 5:
+                    ts = 6;
+                    break;
+                case 6:
+                    ts = 5;
+                    break;
+                case 7:
+                    ts = 3;
+                    break;
+                case 8:
+                    ts = 7;
+                    break;
+                case 9:
+                    ts = 9;
+                    break;
+                case 10:
+                    ts = 6;
+                    break;
+                default:
+                    // No debería pasar
+                    ts = 1;
+                    break;
+                }
+                procesos.add(new Proceso(pid, ts));
+            }
         }
         return procesos;
     }
@@ -56,7 +108,7 @@ public class Main {
         resultados.forEach(resultado -> {
             final int pid = resultado.getPid();
             final int reloj = resultado.getReloj();
-            System.out.printf("| " + GREEN  + "PID" + RESET + ": %3d | " + GREEN + "TS" + RESET + ": %3d |\n", pid, reloj);
+            System.out.printf("| " + ANSIColors.GREEN  + "PID" + RESET + ": %3d | " + GREEN + "TS" + RESET + ": %3d |\n", pid, reloj);
         });
         System.out.println(" --------------------");
     }
