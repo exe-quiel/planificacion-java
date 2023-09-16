@@ -20,17 +20,8 @@ public class Main {
     private static final String CYAN = "\u001B[36m";
     private static final String WHITE = "\u001B[37m";
 
-    private static List<Proceso> crearProcesos() {
-        List<Proceso> procesos = new LinkedList<>();
-        for (int pid = 1; pid <= 10; pid++) {
-            int ts = ThreadLocalRandom.current().nextInt(1, 11);
-            procesos.add(new Proceso(pid, ts));
-        }
-        return procesos;
-    }
-
     public static void main(String[] args) {
-        for (int i = 0; i < 10; i++) {
+        //for (int i = 0; i < 10; i++) {
             List<Proceso> procesos = crearProcesos();
             imprimirProcesos(procesos);
             // Necesitamos una copia porque RoundRobin.procesar() modifica el tiempo de servicio de los procesos
@@ -38,7 +29,16 @@ public class Main {
             List<Resultado> resultados = new RoundRobin().procesar(procesosCopia);
             imprimirResultados(resultados);
             calcularPromedios(resultados, procesos);
+        //}
+    }
+
+    private static List<Proceso> crearProcesos() {
+        List<Proceso> procesos = new LinkedList<>();
+        for (int pid = 1; pid <= 10; pid++) {
+            int ts = ThreadLocalRandom.current().nextInt(1, 11);
+            procesos.add(new Proceso(pid, ts));
         }
+        return procesos;
     }
 
     private static void imprimirProcesos(List<Proceso> procesos) {
